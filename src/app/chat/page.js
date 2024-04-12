@@ -1,12 +1,12 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 
 import { socket } from "@/socket"
 import MsgInput from "../components/MsgInput"
 
-export default function ChatPage() {
+function ChatPageInner() {
   const searchParams = useSearchParams()
   const room = searchParams.get("room")
   const [isLoading, setIsLoading] = useState(true)
@@ -38,5 +38,14 @@ export default function ChatPage() {
       <br />
       <MsgInput room={room} />
     </div>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    // useSearchParams() needs to be wrapped in a Suspense boundary.
+    <Suspense>
+      <ChatPageInner />
+    </Suspense>
   )
 }

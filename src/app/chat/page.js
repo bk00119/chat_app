@@ -1,51 +1,22 @@
-"use client"
+"use server"
 
-import { useSearchParams } from "next/navigation"
-import { useEffect, useState, Suspense } from "react"
+import { Suspense } from "react"
 
-import { socket } from "@/socket"
-import MsgInput from "../components/MsgInput"
+import ChatList from "../components/chatList"
+import ChatRoom from "../components/chatRoom"
 
-function ChatPageInner() {
-  const searchParams = useSearchParams()
-  const room = searchParams.get("room")
-  const [isLoading, setIsLoading] = useState(true)
-  const [messageReceived, setMessageReceived] = useState("")
-
-  useEffect(() => {
-    if (isLoading) {
-      if (room) {
-        joinRoom()
-      }
-    }
-    socket.on("receive_message", (data) => {
-      setMessageReceived(data.message)
-    })
-  }, [socket])
-
-  async function joinRoom() {
-    socket.emit("join_room", room)
-    setIsLoading(false)
-  }
-
-  return (
-    <div className="w-full">
-      <h1> Message:</h1>
-      {messageReceived}
-      
-      {/* REMOVE BR */}
-      <br />
-      <br />
-      <MsgInput room={room} />
-    </div>
-  )
-}
-
-export default function ChatPage() {
+export default async function ChatPage() {
   return (
     // useSearchParams() needs to be wrapped in a Suspense boundary.
     <Suspense>
-      <ChatPageInner />
+      <div className="flex w-full">
+        {/* SHOW CHAT LIST -- FOR LAPTOP, NOT FOR MOBILE */}
+        <div className="w-96 hidden sm:flex">
+          <ChatList />
+        </div>
+
+        <ChatRoom />
+      </div>
     </Suspense>
   )
 }

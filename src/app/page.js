@@ -1,18 +1,23 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 import RoomInput from "./components/RoomInput"
 import SignoutButton from "./components/signoutButton"
+import ChatList from "./components/chatList"
 
+// ONLY FOR MOBILE
 export default function Home() {
-  const [isMobile, setMobile] = useState(true)
+  const router = useRouter()
   const [isLoaded, setLoaded] = useState(false)
 
   useEffect(() => {
     if (!isLoaded) {
       const screen_width = window.innerWidth
-      setMobile(screen_width < 640)
+      if(screen_width >= 640){
+        router.push('/chat')
+      }
       setLoaded(true)
     }
   }, [isLoaded])
@@ -21,10 +26,11 @@ export default function Home() {
     <div className="w-full">
       {/* TEMPORARY PLACEMENT */}
       <SignoutButton />
-
-      {isMobile ? <div>MOBILE</div> : <div>LAPTOP</div>}
-
       <RoomInput />
+
+      {/* CHAT LIST */}
+      <ChatList />
+      
     </div>
   ) : (
     <div>Loading</div>

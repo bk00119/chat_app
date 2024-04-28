@@ -1,6 +1,6 @@
-"use server"
+"use client"
 
-export default async function ChatList() {
+export default function ChatList() {
   return (
     <div>
       <p>CHAT LIST</p>

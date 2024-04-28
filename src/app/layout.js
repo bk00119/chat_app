@@ -22,7 +22,8 @@ export default function RootLayout({ children }) {
           <header className="w-full">
             {/* NAVBAR */}
           </header>
-          <main className="h-full mt-4 w-full max-w-7xl px-4">
+          {/* <main className="h-full mt-4 w-full max-w-7xl px-4"> */}
+          <main className="h-full w-full">
           {/* {children} */}
           <Suspense fallback={<Loading />}>{children}</Suspense>
           </main>

@@ -1,19 +1,42 @@
-"use server"
+"use client"
 
-export default async function ChatRoom() {
+import { useSearchParams } from "next/navigation"
+import { useEffect, useState, Suspense } from "react"
+
+import { socket } from "@/socket"
+import MsgInput from "../MsgInput"
+
+export default function ChatRoom() {
+  const searchParams = useSearchParams()
+  const room = searchParams.get("room")
+  const [isLoading, setIsLoading] = useState(true)
+  const [messageReceived, setMessageReceived] = useState("")
+
+  useEffect(() => {
+    if (isLoading) {
+      if (room) {
+        joinRoom()
+      }
+    }
+    socket.on("receive_message", (data) => {
+      setMessageReceived(data.message)
+    })
+  }, [socket])
+
+  async function joinRoom() {
+    socket.emit("join_room", room)
+    setIsLoading(false)
+  }
+
   return (
-    <div>
-      <div className="w-20 h-20 bg-red-500 hidden sm:flex">
-        {/* SHOW CHAT LIST -- FOR LAPTOP, NOT FOR MOBILE */}
-        {/* RENDER CHATLIST ? */}
-        {console.log("laptop")}
-      </div>
+    <div className="w-full">
+      <h1> Message:</h1>
+      {messageReceived}
 
-
-      <div className="w-20 h-20 bg-blue-500 flex sm:hidden">
-        {/* CHAT ROOM */}
-        {console.log("mobile")}
-      </div>
+      {/* REMOVE BR */}
+      <br />
+      <br />
+      <MsgInput room={room} />
     </div>
   )
 }

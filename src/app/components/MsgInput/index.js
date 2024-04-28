@@ -19,7 +19,7 @@ export default function MsgInput({ room }) {
           setMessage(event.target.value)
         }}
       />
-      <button onClick={sendMessage}>Send</button>
+      <button onClick={sendMessage} className="">Send</button>
     </div>
   )
 }

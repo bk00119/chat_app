@@ -1,7 +1,8 @@
-import { Inter } from "next/font/google"
+import { Inter, Merienda } from "next/font/google"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
+const merienda = Merienda({ subsets: ["latin"], variable: '--font-merienda'})
 
 export const metadata = {
   title: "MangoTalk",
@@ -12,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${inter.className} + min-h-screen flex flex-col justify-between`}
+        className={`${inter.className} ${merienda.variable} + min-h-screen flex flex-col justify-between`}
       >
         <div className="w-full flex flex-col justify-center items-center mb-4">
           <header className="w-full">

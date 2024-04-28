@@ -1,4 +1,7 @@
 import { Inter, Merienda } from "next/font/google"
+import { Suspense } from "react"
+
+import Loading from "./loading"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -20,7 +23,8 @@ export default function RootLayout({ children }) {
             {/* NAVBAR */}
           </header>
           <main className="h-full mt-4 w-full max-w-7xl px-4">
-          {children}
+          {/* {children} */}
+          <Suspense fallback={<Loading />}>{children}</Suspense>
           </main>
         </div>
       </body>

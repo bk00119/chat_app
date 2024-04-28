@@ -20,24 +20,24 @@ async function init(req, res) {
   await init()
 })()
 
-export async function userSignin(reqData){
-  try {
-    if (!users) await init()
-    const res = await users.findOne({username: reqData.username, password: reqData.password})
-    if (!res){
-      return  { error: "Failed to fetch." }
-    }
-    return { data: res }
-  } catch (error) {
-    return { error: "Failed to fetch users." }
-  }
-}
+// export async function userSignin(reqData){
+//   try {
+//     if (!users) await init()
+//     const res = await users.findOne({username: reqData.username, password: reqData.password})
+//     if (!res){
+//       return  { error: "Failed to fetch." }
+//     }
+//     return { data: res }
+//   } catch (error) {
+//     return { error: "Failed to fetch users." }
+//   }
+// }
 
-export async function getUser(reqData){
+export async function getUserByUsername(reqData) {
   try {
     if (!users) await init()
-    const res = await users.findOne({username: reqData.username})
-    if (!res){
+    const res = await users.findOne({ username: reqData.username })
+    if (!res) {
       // return  { error: "Failed to fetch." }
       // return new Error("Failed to fetch")
       return null
@@ -46,6 +46,19 @@ export async function getUser(reqData){
   } catch (error) {
     // return { error: "Failed to fetch users." }
     // return new Error("Failed to fetch")
+    return null
+  }
+}
+
+export async function signupUser(reqData) {
+  try {
+    if (!users) await init()
+    const res = await users.insertOne(reqData)
+    if (!res) {
+      return null
+    }
+    return res?.insertedId
+  } catch (error) {
     return null
   }
 }

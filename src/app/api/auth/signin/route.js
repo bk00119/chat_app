@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 
-import { getUser, userSignin } from "@/lib/db/auth"
+import { getUserByUsername } from "@/lib/db/auth"
 import { verifyPassword } from "@/utils/auth"
 
 import { generateAccessToken, generateRefreshToken } from "@/utils/jwt"
@@ -12,7 +12,7 @@ export async function POST(req) {
   const auth_success_msg = "Authentication completed"
 
   // 1) CHECK THE HASHED PASSWORD FROM THE DB WITH ITS USERNAME
-  const user = await getUser(reqData)
+  const user = await getUserByUsername(reqData)
   if (!user) {
     return new Response(JSON.stringify({ message: auth_fail_msg }), {
       statusText: auth_fail_msg,

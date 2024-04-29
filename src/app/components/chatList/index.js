@@ -5,6 +5,7 @@ import { FaUser } from "react-icons/fa6"
 import NewChatButton from "../newChatButton"
 import SignoutButton from "../signoutButton"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 const chats = [
   {
@@ -137,6 +138,14 @@ const chats = [
 ]
 
 export default function ChatList() {
+  const [isLoaded, setLoaded] = useState(false)
+  
+  useEffect(()=>{
+    if(!isLoaded && chats){
+      setLoaded(true)
+    }
+  },[isLoaded])
+  
   const router = useRouter()
   function joinChat(chat_id) {
     if (!chat_id) {
@@ -145,7 +154,8 @@ export default function ChatList() {
     router.push(`/chat?room=${chat_id}`)
   }
   return (
-    <div className="w-full pt-6 sm:pt-4 h-screen max-h-screen min-h-screen overflow-y-hidden flex flex-col">
+    isLoaded && (
+<div className="w-full pt-6 sm:pt-4 h-screen max-h-screen min-h-screen overflow-y-hidden flex flex-col">
       {/* TOP BAR */}
       <div className="flex w-full justify-between items-center mb-4 px-6 sm:px-4 ">
         <p className="text-2xl">Chats</p>
@@ -162,7 +172,8 @@ export default function ChatList() {
               onClick={() => joinChat(chat?._id)}
             >
               <div>
-                <div className={`w-fit p-2 rounded-full bg-[${chat.color}]`}>
+                <div className={`w-fit p-2 rounded-full ${chat.color ? `bg-[${chat.color}]` : 'bg-gray-300'}`}>
+                {/* <div className={"w-fit p-2 rounded-full bg-["+chat.color.toString()+"]"}> */}
                   <FaUser />
                 </div>
               </div>
@@ -179,5 +190,6 @@ export default function ChatList() {
         <SignoutButton />
       </div>
     </div>
+    )
   )
 }

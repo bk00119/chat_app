@@ -172,8 +172,8 @@ export default function ChatList() {
               onClick={() => joinChat(chat?._id)}
             >
               <div>
-                <div className={`w-fit p-2 rounded-full ${chat.color ? `bg-[${chat.color}]` : 'bg-gray-300'}`}>
-                {/* <div className={"w-fit p-2 rounded-full bg-["+chat.color.toString()+"]"}> */}
+              <div className={"w-fit p-2 rounded-full"} style={{backgroundColor: chat.color}}>
+                {/* <div className={`w-fit p-2 rounded-full ${chat.color ? `bg-[${chat.color}]` : 'bg-gray-300'}`} style={{backgroundColor: chat.color}}> */}
                   <FaUser />
                 </div>
               </div>

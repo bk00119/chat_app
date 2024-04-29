@@ -1,6 +1,6 @@
 import clientPromise from "."
 import { ObjectId } from "mongodb"
-import { getUserByUsername } from "./auth"
+import { getUser, getUserByUsername } from "./auth"
 
 let client
 let db
@@ -37,6 +37,56 @@ export async function getChatFromUser(reqData) {
     return res.chat_ids
   } catch (error) {
     return null
+  }
+}
+
+export async function getUserChats(reqData) {
+  // DIRECTLY FOR THE API
+  // reqData
+  // user_id: user's _id
+  try {
+    if (!users) await init()
+    const chat_data = await users
+      .aggregate([
+        { $match: { _id: new ObjectId(reqData.user_id) } },
+        { $project: { chat_ids: 1 } },
+        {
+          $lookup: {
+            from: "chats",
+            localField: "chat_ids",
+            foreignField: "_id",
+            as: "chats",
+          },
+        },
+        {
+          $unwind: "$chats",
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "chats.users",
+            foreignField: "_id",
+            as: "chats.usernames",
+            pipeline: [
+              {
+                $project: {
+                  _id: 1,
+                  username: 1,
+                },
+              },
+            ],
+          },
+        },
+        { $replaceRoot: { newRoot: "$chats" } },
+      ])
+      .toArray()
+    if (!chat_data) {
+      return { error: "Internal Server Error: getUserChats" }
+    }
+
+    return { data: chat_data }
+  } catch (error) {
+    return { error: error }
   }
 }
 
@@ -85,7 +135,7 @@ export async function hasChatBetweenUsers(reqData) {
   return false
 }
 
-export async function addChatIdToUser(reqData){
+export async function addChatIdToUser(reqData) {
   // reqData
   // user_id: user's _id
   // chat_id: chat _id
@@ -93,7 +143,7 @@ export async function addChatIdToUser(reqData){
     if (!users) await init()
     const res = await users.updateOne(
       { _id: new ObjectId(reqData.user_id) },
-      { $addToSet: { chat_ids: new ObjectId(reqData.chat_id) }}
+      { $addToSet: { chat_ids: new ObjectId(reqData.chat_id) } }
     )
     if (!res) {
       return null
@@ -105,6 +155,7 @@ export async function addChatIdToUser(reqData){
 }
 
 export async function createChat(reqData) {
+  // DIRECTLY FOR THE API
   // reqData
   // user_id: curr user's _id
   // username: other user's username
@@ -114,37 +165,34 @@ export async function createChat(reqData) {
     // 1A) CHECK IF THE USERNAME (OTHER USER) EXISTS
     const user = await getUserByUsername(reqData)
     if (!user) {
-      return { error : "Username doesn't exist."}
+      return { error: "Username doesn't exist." }
     }
     // 1A) CHECK IF THE USERNAME IS THE CURR USER'S USERNAME
-    if(user._id.toString() === reqData.user_id){
-      return { error : "Username must not be the same as your username."}
+    if (user._id.toString() === reqData.user_id) {
+      return { error: "Username must not be the same as your username." }
     }
 
     // 2) CHECK IF THERE'S ALREADY A CHAT ROOM EXISTS BETWEEN THE USERS
     reqData.other_user_id = user._id
     const hasChat = await hasChatBetweenUsers(reqData)
     if (hasChat) {
-      return { error : `You already have a chat with ${reqData?.username}`}
+      return { error: `You already have a chat with ${reqData?.username}` }
     }
     if (hasChat == null) {
       // ERROR
-      return { errror : "Internal server error: hasChatBetweenUsers"}
+      return { errror: "Internal server error: hasChatBetweenUsers" }
     }
 
     // 3) CREATE A CHAT ROOM
     const chat_data = {
-      users: [
-        new ObjectId(reqData.user_id),
-        new ObjectId(user._id)
-      ],
+      users: [new ObjectId(reqData.user_id), new ObjectId(user._id)],
       lastUpdated: new Date(),
       color: "#FBD344",
     }
     const res = await chats.insertOne(chat_data)
-    if (!res){
+    if (!res) {
       // ERROR
-      return { error: "Internal server error: creating a chat room"}
+      return { error: "Internal server error: creating a chat room" }
     }
     const chat_id = res.insertedId.toString()
     reqData.chat_id = chat_id
@@ -153,23 +201,27 @@ export async function createChat(reqData) {
     // 4A) CURRENT USER
     const update_curr_user_chat = {
       user_id: reqData.user_id,
-      chat_id: chat_id
+      chat_id: chat_id,
     }
     const updated_curr_user = await addChatIdToUser(update_curr_user_chat)
-    if(!updated_curr_user || updated_curr_user.modifiedCount != 1){
+    if (!updated_curr_user || updated_curr_user.modifiedCount != 1) {
       // ERROR
-      return { error: `Internal server error: adding a new chat_id to ${reqData.user_id}`}
+      return {
+        error: `Internal server error: adding a new chat_id to ${reqData.user_id}`,
+      }
     }
 
     // 4B) OTHER USER
     const update_other_user_chat = {
       user_id: reqData.other_user_id,
-      chat_id: chat_id
+      chat_id: chat_id,
     }
     const updated_other_user = await addChatIdToUser(update_other_user_chat)
-    if(!updated_other_user || updated_other_user.modifiedCount != 1){
+    if (!updated_other_user || updated_other_user.modifiedCount != 1) {
       // ERROR
-      return { error: `Internal server error: adding a new chat_id to ${reqData.other_user_id}`}
+      return {
+        error: `Internal server error: adding a new chat_id to ${reqData.other_user_id}`,
+      }
     }
 
     // 5) RETURN RESPONSE

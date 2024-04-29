@@ -1,6 +1,10 @@
 import { cookies } from "next/headers"
 
-import { signupUser, getUserByUsername } from "@/lib/db/auth"
+import {
+  signupUser,
+  getUserByUsername,
+  updateRefreshToken,
+} from "@/lib/db/auth"
 import { hashPassword } from "@/utils/auth"
 import { generateAccessToken, generateRefreshToken } from "@/utils/jwt"
 
@@ -34,6 +38,7 @@ export async function POST(req) {
   reqData.password = hashed_password
 
   // 3) ADD A USER TO THE DB -> GET USER_ID
+  reqData.refresh_token = ""
   const user_id = await signupUser(reqData)
   if (!user_id) {
     return failedResponse(auth_fail_msg)
@@ -51,12 +56,30 @@ export async function POST(req) {
     httpOnly: true,
     sameSite: "lax",
   })
+
+  // 5) ADD REFRESH TOKEN TO THE DB
+  const updatedRefreshToken = await updateRefreshToken({
+    _id: user_id,
+    refresh_token: refresh_token,
+  })
+  if (!updateRefreshToken) {
+    return new Response(
+      JSON.stringify({ message: update_refresh_token_fail_msg }),
+      {
+        statusText: update_refresh_token_fail_msg,
+        status: 500,
+        headers: { "content-type": "application/json" },
+      }
+    )
+  }
+
   // GENERAL USER DATA
   const user_id_cookie = cookies().set("user_id", user_id)
+  const username_cookie = cookies().set("username", reqData.username)
 
-  // 5) RETURN A RESPONSE
+  // 6) RETURN A RESPONSE
   return new Response(
-    JSON.stringify({ data: {user_id: user_id}, message: auth_success_msg }),
+    JSON.stringify({ data: { user_id: user_id }, message: auth_success_msg }),
     {
       statusText: auth_success_msg,
       status: 201,

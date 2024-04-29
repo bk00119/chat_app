@@ -29,7 +29,6 @@ export default function NewChatForm({ openModal=null, setOpenModal = null }) {
         if(openModal){
           setOpenModal(false)
         }
-        router.refresh()
       } else {
         throw new Error(res.statusText)
       }

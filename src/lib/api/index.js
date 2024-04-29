@@ -31,3 +31,11 @@ export async function postAPI(reqData, dbFunction) {
     })
   }
 }
+
+export async function invalidAccessTokenResponse(){
+  return new Response(JSON.stringify({ message: "Invalid access token" }), {
+    statusText: "Invalid access token",
+    status: 500,
+    headers: { "content-type": "application/json" },
+  })
+}

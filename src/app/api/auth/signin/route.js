@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 
-import { getUserByUsername } from "@/lib/db/auth"
+import { getUserByUsername, updateRefreshToken } from "@/lib/db/auth"
 import { verifyPassword } from "@/utils/auth"
 
 import { generateAccessToken, generateRefreshToken } from "@/utils/jwt"
@@ -10,6 +10,7 @@ export async function POST(req) {
   const password = reqData.password
   const auth_fail_msg = "Incorrect username or password"
   const auth_success_msg = "Authentication completed"
+  const update_refresh_token_fail_msg = "Updating refresh token failed"
 
   // 1) CHECK THE HASHED PASSWORD FROM THE DB WITH ITS USERNAME
   const user = await getUserByUsername(reqData)
@@ -43,10 +44,28 @@ export async function POST(req) {
     httpOnly: true,
     sameSite: "lax",
   })
+
+  // 4) ADD REFRESH TOKEN TO THE DB
+  const updatedRefreshToken = await updateRefreshToken({
+    _id: user._id,
+    refresh_token: refresh_token,
+  })
+  if (!updateRefreshToken) {
+    return new Response(
+      JSON.stringify({ message: update_refresh_token_fail_msg }),
+      {
+        statusText: update_refresh_token_fail_msg,
+        status: 500,
+        headers: { "content-type": "application/json" },
+      }
+    )
+  }
+
   // GENERAL USER DATA
   const user_id_cookie = cookies().set("user_id", user._id)
+  const username_cookie = cookies().set("username", user.username)
 
-  // 4) RETURN A RESPONSE
+  // 5) RETURN A RESPONSE
   return new Response(
     JSON.stringify({ data: user._id, message: auth_success_msg }),
     {

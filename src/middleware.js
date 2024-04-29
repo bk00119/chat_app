@@ -3,8 +3,20 @@ import { NextResponse } from "next/server"
 import { verifyToken, decodeToken, regenerateAccessToken } from "./utils/jwt"
 // import { regenerateAccessToken } from "./utils/auth"
 
+
 // This function can be marked `async` if using `await` inside
 export async function middleware(request) {
+  function signout(){
+    let response = NextResponse.redirect(
+      new URL("/auth/signin", request.url)
+    )
+    response.cookies.delete("access_token")
+    response.cookies.delete("refresh_token")
+    response.cookies.delete("user_id")
+    response.cookies.delete("username")
+    return response
+  }
+
   const { pathname, origin } = request.nextUrl
 
   const access_token = request.cookies.get("access_token")?.value
@@ -25,13 +37,38 @@ export async function middleware(request) {
         )
         if (!new_access_token) {
           // USER_ID FROM ACCESS_TOKEN AND REFRESH_TOKEN DON'T MATCH
-          let response = NextResponse.redirect(
-            new URL("/auth/signin", request.url)
+          return signout()
+        }
+
+
+        // CHECK THE REFRESH_TOKEN FROM THE DB AND COMPARE
+        let db_refresh_token
+        try {
+          // CHANGE LOCALHOST
+          const res = await fetch(
+            "http://localhost:3000/api/auth/getRefreshToken",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                access_token: access_token,
+              }),
+            }
           )
-          response.cookies.delete("access_token")
-          response.cookies.delete("refresh_token")
-          response.cookies.delete("user_id")
-          return response
+          if (!res) {
+            console.log("error")
+            return signout()
+          }
+          db_refresh_token = await res.json()
+          if (db_refresh_token != refresh_token){
+            return signout()
+          }
+    
+        } catch (error) {
+          console.log(error)
+          return signout()
         }
 
         response.cookies.set("access_token", new_access_token, {
@@ -42,13 +79,7 @@ export async function middleware(request) {
       }
     } else {
       // REFRESH_TOKEN IS EXPIRED -> SIGN OUT
-      let response = NextResponse.redirect(new URL("/auth/signin", request.url))
-
-      response.cookies.delete("access_token")
-      response.cookies.delete("refresh_token")
-      response.cookies.delete("user_id")
-
-      return response
+      return signout()
     }
   }
 

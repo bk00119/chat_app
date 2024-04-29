@@ -34,10 +34,6 @@ export default function NewChatButton() {
     }
   }
 
-  function test() {
-    console.log("AHELL")
-  }
-
   return (
     isLoaded && (
       <>
@@ -45,7 +41,7 @@ export default function NewChatButton() {
           onClick={openNewChat}
           className="text-primary-red hover:text-secondary-red focus:outline-none"
         >
-          <PiNotePencilBold size={32} />
+          <PiNotePencilBold size={26} />
         </button>
 
         {/* MODAL */}

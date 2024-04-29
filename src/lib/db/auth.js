@@ -50,7 +50,7 @@ export async function getUserByUsername(reqData) {
   }
 }
 
-export async function getUser(reqData){
+export async function getUser(reqData) {
   // reqData
   // _id: curr user's _id
   try {
@@ -73,6 +73,40 @@ export async function signupUser(reqData) {
       return null
     }
     return res?.insertedId
+  } catch (error) {
+    return null
+  }
+}
+
+export async function getRefreshToken(reqData) {
+  // reqData
+  // _id: curr user's _id
+  try {
+    if (!users) await init()
+    const res = await users.findOne({ _id: new ObjectId(reqData._id) })
+    if (!res) {
+      return null
+    }
+    return { data : res.refresh_token } 
+  } catch (error) {
+    return null
+  }
+}
+
+export async function updateRefreshToken(reqData) {
+  // reqData
+  // _id: curr user's _id
+  // refresh_token: new refresh token value
+  try {
+    if (!users) await init()
+    const res = await users.updateOne(
+      { _id: new ObjectId(reqData._id) },
+      { $set: { refresh_token: reqData.refresh_token } }
+    )
+    if (!res) {
+      return null
+    }
+    return { data : reqData.refresh_token } 
   } catch (error) {
     return null
   }

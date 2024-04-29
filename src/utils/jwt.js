@@ -57,11 +57,12 @@ export async function generateAccessToken(user_id) {
 export async function regenerateAccessToken(access_token, refresh_token) {
   const access_token_payload = await decodeToken(access_token)
   const refresh_token_payload = await decodeToken(refresh_token)
-  if (access_token_payload.user_id === refresh_token_payload.user_id) {
-    // REGENERATE ACCESS_TOKEN
-    return generateAccessToken(access_token_payload.user_id)
+  // CHECK IF USER_ID MATCH
+  if (access_token_payload.user_id != refresh_token_payload.user_id) {
+    return null
   }
-  return null
+  // REGENERATE ACCESS_TOKEN
+  return generateAccessToken(access_token_payload.user_id)
 }
 
 export async function generateRefreshToken(user_id) {

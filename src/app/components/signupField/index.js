@@ -40,10 +40,10 @@ export default function SignupField() {
         router.push("/")
         router.refresh()
       } else {
-        throw new Error("Failed to create task")
+        throw new Error("Failed to signup")
       }
     } catch (error) {
-      console.log("error updating is_completed of task: ", error)
+      console.log("error updating is_completed of : ", error)
     }
 
     setFullname('')

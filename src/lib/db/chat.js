@@ -188,7 +188,8 @@ export async function createChat(reqData) {
     const chat_data = {
       users: [new ObjectId(reqData.user_id), new ObjectId(user._id)],
       lastUpdated: new Date(),
-      color: "#FBD344",
+      // color: "#FBD344",
+      color: reqData.color,
     }
     const res = await chats.insertOne(chat_data)
     if (!res) {

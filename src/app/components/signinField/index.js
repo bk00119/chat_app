@@ -49,6 +49,7 @@ export default function SigninField() {
       <input
         className="focus:outline-none px-3 py-2 text-lg mb-4 rounded"
         placeholder="Username"
+        autocapitalize="none"
         value={username}
         onChange={(e)=>setUsername(e.currentTarget.value)}
       />
@@ -56,6 +57,7 @@ export default function SigninField() {
         className="focus:outline-none px-3 py-2 text-lg mb-4 rounded"
         placeholder="Password"
         type="password"
+        autocapitalize="none"
         value={password}
         onChange={(e)=>setPassword(e.currentTarget.value)}        
       />

@@ -22,17 +22,15 @@ export default function Home() {
     }
   }, [isLoaded])
 
-  return isLoaded ? (
+  return isLoaded && (
     <div className="w-full">
       {/* TEMPORARY PLACEMENT */}
-      <SignoutButton />
-      <RoomInput />
+      {/* <SignoutButton />
+      <RoomInput /> */}
 
       {/* CHAT LIST */}
       <ChatList />
       
     </div>
-  ) : (
-    <div>Loading</div>
   )
 }

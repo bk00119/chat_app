@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.className} ${merienda.variable} + min-h-screen flex flex-col justify-between`}
       >
-        <div className="w-full flex flex-col justify-center items-center mb-4">
+        <div className="w-full flex flex-col justify-center items-center">
           <header className="w-full">
             {/* NAVBAR */}
           </header>

@@ -46,7 +46,7 @@ export async function middleware(request) {
         try {
           // CHANGE LOCALHOST
           const res = await fetch(
-            "http://localhost:3000/api/auth/getRefreshToken",
+            `${process.env.NEXT_SERVER}/api/auth/getRefreshToken`,
             {
               method: "POST",
               headers: {

@@ -173,7 +173,6 @@ export default function ChatList() {
             >
               <div>
               <div className={"w-fit p-3 rounded-full"} style={{backgroundColor: chat.color}}>
-                {/* <div className={`w-fit p-2 rounded-full ${chat.color ? `bg-[${chat.color}]` : 'bg-gray-300'}`} style={{backgroundColor: chat.color}}> */}
                   <FaUser size={20} />
                 </div>
               </div>

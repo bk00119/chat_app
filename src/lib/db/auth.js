@@ -50,6 +50,21 @@ export async function getUserByUsername(reqData) {
   }
 }
 
+export async function getUser(reqData){
+  // reqData
+  // _id: curr user's _id
+  try {
+    if (!users) await init()
+    const res = await users.findOne({ _id: reqData._id })
+    if (!res) {
+      return null
+    }
+    return res
+  } catch (error) {
+    return null
+  }
+}
+
 export async function signupUser(reqData) {
   try {
     if (!users) await init()

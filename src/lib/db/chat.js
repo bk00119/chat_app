@@ -72,6 +72,7 @@ export async function getUserChats(reqData) {
                 $project: {
                   _id: 1,
                   username: 1,
+                  fullname: 1,
                 },
               },
             ],

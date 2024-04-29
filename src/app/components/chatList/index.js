@@ -46,10 +46,10 @@ export default function ChatList() {
     router.push(`/chat?room=${chat_id}`)
   }
 
-  function getUsername(users){
+  function getFullname(users){
     for(const user of users){
       if(user?._id != curr_user_id){
-        return user?.username
+        return user?.fullname
       }
     }
     return null
@@ -83,7 +83,7 @@ export default function ChatList() {
                   </div>
                 </div>
                 <p className="ml-4 text-start">
-                  {getUsername(chat?.usernames)}
+                  {getFullname(chat?.usernames)}
                 </p>
               </button>
             )):(<div className="px-6 sm:px-4">Loading chats...</div>)}

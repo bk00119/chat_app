@@ -10,16 +10,17 @@ import { useEffect, useState } from "react"
 
 export default function ChatList() {
   const router = useRouter()
-  const [isLoaded, setLoaded] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [chats, setChats] = useState(null)
 
   const curr_user_id = Cookies.get('user_id')
 
   useEffect(() => {
-    if (!isLoaded && !chats) {
+    // if (!isLoading && !chats) {
+    if (isLoading) {
       getChats()
     }
-  }, [isLoaded])
+  }, [isLoading])
 
   async function getChats() {
     try {
@@ -29,7 +30,7 @@ export default function ChatList() {
       if (res.ok) {
         const data = await res.json()
         setChats(data)
-        setLoaded(true)
+        setLoading(false)
       } else {
         throw new Error(res.statusText)
       }
@@ -60,13 +61,13 @@ export default function ChatList() {
       {/* TOP BAR */}
       <div className="flex w-full justify-between items-center mb-4 px-6 sm:px-4 ">
         <p className="text-2xl">Chats</p>
-        <NewChatButton />
+        <NewChatButton loadNewChats={setLoading}/>
       </div>
 
       {/* CHAT LIST */}
       <div className="flex flex-col h-full sm:overflow-y-scroll overflow-y-auto">
         <div className="pt-4">
-          {isLoaded ?
+          {!isLoading ?
             chats &&
             chats.map((chat) => (
               <button

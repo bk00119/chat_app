@@ -6,7 +6,7 @@ import { PiNotePencilBold } from "react-icons/pi"
 import Modal from "../modal"
 import NewChatForm from "../newChatForm"
 
-export default function NewChatButton() {
+export default function NewChatButton({ loadNewChats }) {
   const router = useRouter()
   const [isLoaded, setLoaded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -46,9 +46,17 @@ export default function NewChatButton() {
 
         {/* MODAL */}
         {openModal && (
-          <Modal openModal={openModal} setOpenModal={setOpenModal} title="New chat">
+          <Modal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            title="New chat"
+          >
             {/* INCLUDE NEWCHATFORM COMPONENT HERE */}
-            <NewChatForm openModal={openModal} setOpenModal={setOpenModal}  />
+            <NewChatForm
+              openModal={openModal}
+              setOpenModal={setOpenModal}
+              loadNewChats={loadNewChats}
+            />
           </Modal>
         )}
       </>

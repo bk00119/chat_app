@@ -3,12 +3,19 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-export default function NewChatForm({ openModal=null, setOpenModal = null }) {
+export default function NewChatForm({
+  openModal = null,
+  setOpenModal = null,
+  loadNewChats = null,
+}) {
   const router = useRouter()
   const [username, setUsername] = useState("")
 
   async function startChat(e) {
     e.preventDefault()
+    if (!username || username.length == 0) {
+      return alert("Please type a username")
+    }
 
     try {
       const res = await fetch("/api/chat/create", {
@@ -26,8 +33,11 @@ export default function NewChatForm({ openModal=null, setOpenModal = null }) {
         // REFRESH THE CHAT LIST
         router.push(`/chat?room=${chat_id}`)
         router.refresh()
-        if(openModal){
+        if (openModal) {
           setOpenModal(false)
+        }
+        if (loadNewChats) {
+          loadNewChats(true)
         }
       } else {
         throw new Error(res.statusText)

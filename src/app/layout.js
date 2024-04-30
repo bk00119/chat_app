@@ -15,7 +15,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <link rel="icon" href="/favicon.ico" />
       <body
         className={`${inter.className} ${merienda.variable} + flex flex-col justify-between min-h-screen`} /* min-h-screen */
       >

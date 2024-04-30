@@ -14,7 +14,7 @@ export default function Navbar({
 
   return (
     <nav
-      className={`w-full flex justify-between h-16 fixed sm:sticky top-0 z-10 ${divStyles}`}
+      className={`w-full flex justify-between ${divStyles}`}
     >
       {showCancelText ? (
         <button

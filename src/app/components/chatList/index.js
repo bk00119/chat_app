@@ -1,19 +1,19 @@
 "use client"
 
 import { FaUser } from "react-icons/fa6"
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie"
 
 import NewChatButton from "../newChatButton"
 import SignoutButton from "../signoutButton"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
-export default function ChatList() {
+export default function ChatList({ isLoading, setLoading }) {
   const router = useRouter()
-  const [isLoading, setLoading] = useState(true)
+  // const [isLoading, setLoading] = useState(true)
   const [chats, setChats] = useState(null)
 
-  const curr_user_id = Cookies.get('user_id')
+  const curr_user_id = Cookies.get("user_id")
 
   useEffect(() => {
     // if (!isLoading && !chats) {
@@ -23,6 +23,7 @@ export default function ChatList() {
   }, [isLoading])
 
   async function getChats() {
+    console.log('here')
     try {
       const res = await fetch("/api/chat/fetchAll", {
         method: "GET",
@@ -47,9 +48,9 @@ export default function ChatList() {
     router.push(`/chat?room=${chat_id}`)
   }
 
-  function getFullname(users){
-    for(const user of users){
-      if(user?._id != curr_user_id){
+  function getFullname(users) {
+    for (const user of users) {
+      if (user?._id != curr_user_id) {
         return user?.fullname
       }
     }
@@ -61,13 +62,13 @@ export default function ChatList() {
       {/* TOP BAR */}
       <div className="flex w-full justify-between items-center mb-4 px-6 sm:px-4 ">
         <p className="text-2xl">Chats</p>
-        <NewChatButton loadNewChats={setLoading}/>
+        <NewChatButton loadNewChats={setLoading} />
       </div>
 
       {/* CHAT LIST */}
       <div className="flex flex-col h-full sm:overflow-y-scroll overflow-y-auto">
         <div className="pt-4">
-          {!isLoading ?
+          {!isLoading ? (
             chats &&
             chats.map((chat) => (
               <button
@@ -87,7 +88,10 @@ export default function ChatList() {
                   {getFullname(chat?.usernames)}
                 </p>
               </button>
-            )):(<div className="px-6 sm:px-4">Loading chats...</div>)}
+            ))
+          ) : (
+            <div className="px-6 sm:px-4">Loading chats...</div>
+          )}
         </div>
       </div>
 

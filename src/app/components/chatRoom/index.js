@@ -84,7 +84,7 @@ export default function ChatRoom() {
         <Navbar
           title={otherUser ? otherUser.fullname : ""}
           titleStyles="text-start"
-          divStyles="p-4 sm:p-6 bg-white"
+          divStyles="p-4 sm:p-6 bg-white h-16 fixed sm:sticky top-0 z-10"
           showCancelText={false}
         />
         {!isLoading && (

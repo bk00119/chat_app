@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
-import RoomInput from "./components/RoomInput"
-import SignoutButton from "./components/signoutButton"
 import ChatList from "./components/chatList"
 
 // ONLY FOR MOBILE
@@ -24,11 +22,6 @@ export default function Home() {
 
   return isLoaded && (
     <div className="w-full">
-      {/* TEMPORARY PLACEMENT */}
-      {/* <SignoutButton />
-      <RoomInput /> */}
-
-      {/* CHAT LIST */}
       <ChatList />
       
     </div>

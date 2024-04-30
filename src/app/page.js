@@ -9,6 +9,7 @@ import ChatList from "./components/chatList"
 export default function Home() {
   const router = useRouter()
   const [isLoaded, setLoaded] = useState(false)
+  const [listLoading, setListLoading] = useState(true)
 
   useEffect(() => {
     if (!isLoaded) {
@@ -22,7 +23,7 @@ export default function Home() {
 
   return isLoaded && (
     <div className="w-full">
-      <ChatList />
+      <ChatList isLoading={listLoading} setLoading={setListLoading} />
       
     </div>
   )

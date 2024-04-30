@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Final Project Proposal: MangoTalk
 
-## Getting Started
+### [Figma Design](https://www.figma.com/file/IbGZu7tZ8cx57GorKo0XXo/Chat-App?type=design&node-id=0-1&mode=design&t=bY7DKARvmJX5dUkK-0)
 
-First, run the development server:
+### [Demo](https://chat-app-three-kappa.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### To run locally, please check the [instructions](INSTRUCTIONS.md)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech stack
+- Next.js: Deployed on Vercel
+- Express.js + socket.io (private repo): Deployed on Render
+- MongoDB
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Todos
+### Next.js (Client-Side + Server-Side)
+- Pages 
+  - [x] Signin: `/auth/signin`
+  - [x] Signup: `/auth/signup`
+  - Mobile
+    - [x] Home (Chat lists)
+    - [x] New Chat: `/newChat`
+    - [x] Chatroom: `/chat?room=[CHAT_ID]`
+  - Laptop/PC
+    - [x] Home (Chat lists + Chatroom): `/chat?room=[CHAT_ID]`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Server-Side (Outside of class)
+- [x] Design & Setup the database: MongoDB
+- [x] Use socket.io with express.js on an independent server
+- Next.js (Server-Side)
+  - [x] Search users by username for starting a new chat
+  - [x] Authentication (User signin & signup)
+  - [x] Save chat lists (but not the actual chat data)
 
-## Learn More
+## Inspiration
+### KakaoTalk
+![KakaoTalk design](https://openads-real.s3.amazonaws.com/openadsAdmin/new/preConts/2019-08-21_11-39-42_728.png)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Messenger (Facebook)
+![Messenger mobile design](https://miro.medium.com/v2/resize:fit:6480/1*c2cW5ydQsZhvNMVFZjgzPg.png)
+![Messenger laptop design](https://about.fb.com/wp-content/uploads/2020/04/macOS-Dark-Mode.png)

@@ -52,6 +52,7 @@ export default function NewChatForm({
     <form onSubmit={startChat} className="sm:w-96 min-w-64 flex flex-col">
       <input
         value={username}
+        autoCapitalize="none"
         onChange={(e) => setUsername(e.currentTarget.value)}
         placeholder="Search by username"
         className="w-full border-[1px] border-gray-400 px-2 py-1 rounded focus:outline-none"

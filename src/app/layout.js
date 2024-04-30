@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${merienda.variable} + min-h-screen flex flex-col justify-between`}
+        className={`${inter.className} ${merienda.variable} + flex flex-col justify-between min-h-screen`} /* min-h-screen */
       >
         <div className="w-full flex flex-col justify-center items-center">
           <header className="w-full">

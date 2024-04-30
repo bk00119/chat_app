@@ -39,6 +39,7 @@ export async function POST(req) {
 
   // 3) ADD A USER TO THE DB -> GET USER_ID
   reqData.refresh_token = ""
+  reqData.chat_ids = []
   const user_id = await signupUser(reqData)
   if (!user_id) {
     return failedResponse(auth_fail_msg)

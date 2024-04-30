@@ -1,18 +1,41 @@
 "use client"
 
-import { useRouter } from "next/navigation";
-import { MdChevronLeft } from "react-icons/md";
+import { useRouter } from "next/navigation"
+import { MdChevronLeft } from "react-icons/md"
 
-export default function Navbar({title, backButtonText}) {
+export default function Navbar({
+  title,
+  titleStyles = "",
+  divStyles = "",
+  backButtonText = "TITLE",
+  showCancelText = true,
+}) {
   const router = useRouter()
 
   return (
-    <nav className="w-full flex justify-between relative">
-      <button className="flex absolute bottom-0 left-0" onClick={()=>router.back()}>
-        <MdChevronLeft size={24} />
-        <p>{backButtonText}</p>
-      </button>
-      <span className="flex-grow text-center text-2xl">{title}</span>
+    <nav
+      className={`w-full flex justify-between h-16 fixed sm:sticky top-0 z-10 ${divStyles}`}
+    >
+      {showCancelText ? (
+        <button
+          className="flex absolute bottom-0 left-0"
+          onClick={() => router.back()}
+        >
+          <MdChevronLeft size={24} />
+          <p>{backButtonText}</p>
+        </button>
+      ) : (
+        <button
+          className="flex sm:hidden relative left-[-8px]"
+          onClick={() => router.back()}
+        >
+          <MdChevronLeft size={28} />
+        </button>
+      )}
+
+      <span className={`flex-grow text-center text-xl ${titleStyles}`}>
+        {title}
+      </span>
     </nav>
   )
 }

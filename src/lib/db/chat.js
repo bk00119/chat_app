@@ -106,6 +106,57 @@ export async function getChat(reqData) {
   }
 }
 
+export async function getChatWithUsernames(reqData) {
+  // DIRECTLY FOR THE API
+  // reqData
+  // _id: chat id
+  try {
+    if (!chats) await init()
+    const chat_data = await chats
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(reqData._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "users",
+            foreignField: "_id",
+            as: "usernames",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            users: 1,
+            usernames: {
+              $map: {
+                input: "$usernames",
+                as: "user",
+                in: {
+                  username: "$$user.username",
+                  user_id: "$$user._id",
+                  fullname: "$$user.fullname",
+                },
+              },
+            },
+          },
+        },
+      ])
+      .toArray()
+
+    if (!chat_data || chat_data.length == 0) {
+      return { error: `Invalid chat: ${reqData._id}` }
+    }
+
+    return { data: chat_data[0] }
+  } catch (error) {
+    return { error: error }
+  }
+}
+
 export async function hasChatBetweenUsers(reqData) {
   // reqData
   // user_id: curr user's _id

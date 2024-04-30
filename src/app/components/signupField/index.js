@@ -62,14 +62,14 @@ export default function SignupField() {
       <input
         className="focus:outline-none px-3 py-2 text-lg mb-4 rounded"
         placeholder="Username"
-        autocapitalize="none"
+        autoCapitalize="none"
         value={username}
         onChange={(e) => setUsername(e.currentTarget.value)}
       />
       <input
         className="focus:outline-none px-3 py-2 text-lg mb-4 rounded"
         placeholder="Password"
-        autocapitalize="none"
+        autoCapitalize="none"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.currentTarget.value)}
